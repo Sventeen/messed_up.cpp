@@ -42,6 +42,15 @@ public:
         }
         cout << "\n";
     }
+    void recursiveDFS(Vertex value) {
+        static unordered_map<Vertex, bool> isVisited;
+        isVisited[value] = true;
+        cout << value << " ";
+        for(auto i: g[value]) {
+            if(!isVisited[i])
+                recursiveDFS(i);
+        }
+    }
     void BFS(Vertex value) {
         queue<Vertex> q;
         unordered_map<Vertex, bool> isVisited;
@@ -77,5 +86,7 @@ int main() {
     test.printGraph();
     test.DFS(1);
     test.BFS(1);
+    test.recursiveDFS(1);
+    cout << "\n";
     return 0;
 }
