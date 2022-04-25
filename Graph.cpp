@@ -5,9 +5,11 @@
 #include<stack>
 #include<queue>
 
+
 using Vertex = int; // change this as needed
 using Edges = std::unordered_set<Vertex>;
 using Graph = std::unordered_map<Vertex, Edges>;
+using Pair = std::pair<int, Vertex>;
 using namespace std;
 
 class graph {
@@ -68,6 +70,36 @@ public:
         }
         cout << "\n";
     }
+    void PrimsAlgo(Vertex src) {
+        unordered_map<Vertex, int> key;
+        unordered_map<Vertex, Vertex> parent;
+        unordered_map<Vertex, bool> inMST;
+        priority_queue<Pair, vector<Pair>, greater<Pair> > minPQ;
+        for(auto i: g) {
+            key[i.first] = INT_MAX;
+            parent[i.first] = -1;
+            inMST[i.first] = false;
+        }
+        minPQ.push(make_pair(0,src));
+        key[src] = 0;
+        while(!minPQ.empty()) {
+            Vertex u = minPQ.top().second;
+            minPQ.pop();
+            if(inMST[u]) continue;
+            inMST[u] = true;
+            for(auto i: g[u]) {
+                int v = i;
+                int weight = 1; //unweighted graph
+                if(inMST[v] == false && key[v] > weight) {
+                    key[v] = weight;
+                    minPQ.push(make_pair(key[v], v));
+                    parent[v] = u;
+                }
+            }
+        }
+        for(auto i: g)
+            cout << parent[i.first] << " - " << i.first << " | ";
+    }
 };
 
 int main() {
@@ -88,5 +120,6 @@ int main() {
     test.BFS(1);
     test.recursiveDFS(1);
     cout << "\n";
+    test.PrimsAlgo(1);
     return 0;
 }
